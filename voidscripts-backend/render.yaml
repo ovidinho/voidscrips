@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: voidscripts
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: "*"

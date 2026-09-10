@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIDSCRIPTS — Scripts Roblox Gratuitos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#05070d;
+    --panel:#0d1220;
+    --panel-2:#111a2e;
+    --line:#1c2740;
+    --blue:#3d7bff;
+    --blue-dim:#1e3a6e;
+    --ice:#9fc2ff;
+    --text:#dbe4f5;
+    --text-dim:#7688a8;
+    --radius:4px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--text);
+    font-family:'Manrope',sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Chakra Petch',sans-serif;
+    letter-spacing:.2px;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--blue);color:#000;}
+
+  /* background grid + glow */
+  .bg-grid{
+    position:fixed;inset:0;z-index:0;
+    background-image:
+      linear-gradient(to right, rgba(61,123,255,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(61,123,255,0.05) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    pointer-events:none;
+  }
+  .bg-glow{
+    position:fixed;top:-20%;left:50%;transform:translateX(-50%);
+    width:1200px;height:800px;
+    background:radial-gradient(circle, rgba(61,123,255,0.16) 0%, transparent 65%);
+    pointer-events:none;z-index:0;
+  }
+
+  header{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 5vw;
+    background:rgba(5,7,13,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:700;font-size:1.25rem;
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo .mark{
+    width:12px;height:12px;background:var(--blue);
+    box-shadow:0 0 14px 2px rgba(61,123,255,.8);
+    transform:rotate(45deg);
+  }
+  nav{display:flex;gap:32px;font-size:.94rem;color:var(--text-dim);}
+  nav a:hover{color:var(--ice);}
+  .nav-cta{
+    padding:9px 20px;border:1px solid var(--blue);
+    color:var(--ice)!important;font-weight:600;
+    border-radius:var(--radius);
+    transition:background .15s;
+  }
+  .nav-cta:hover{background:rgba(61,123,255,.12);}
+  .burger{display:none;}
+
+  main{position:relative;z-index:1;}
+
+  /* HERO */
+  .hero{
+    padding:9vw 5vw 6vw;
+    display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:end;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-tag{
+    color:var(--blue);font-family:'Chakra Petch';font-weight:600;
+    font-size:.85rem;letter-spacing:1.5px;margin-bottom:22px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .hero-tag::before{content:"";width:22px;height:1px;background:var(--blue);}
+  .hero h1{
+    font-size:clamp(2.6rem,6vw,5.2rem);
+    line-height:.98;font-weight:700;
+    color:#f2f6ff;
+    max-width:14ch;
+  }
+  .hero h1 span{color:var(--blue-dim);-webkit-text-stroke:1px var(--blue);color:transparent;}
+  .hero p.lede{
+    margin-top:26px;font-size:1.08rem;color:var(--text-dim);
+    max-width:46ch;line-height:1.6;
+  }
+  .hero-actions{display:flex;gap:14px;margin-top:34px;}
+  .btn{
+    padding:14px 26px;font-weight:700;font-family:'Chakra Petch';
+    border-radius:var(--radius);font-size:.95rem;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary{
+    background:var(--blue);color:#04070f;
+    box-shadow:0 0 0 0 rgba(61,123,255,.6);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px -6px rgba(61,123,255,.6);}
+  .btn-ghost{
+    border:1px solid var(--line);color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--blue);color:var(--ice);}
+
+  .hero-stats{
+    display:flex;flex-direction:column;gap:0;
+    border-left:1px solid var(--line);
+    padding-left:32px;
+  }
+  .stat{padding:16px 0;border-bottom:1px solid var(--line);}
+  .stat:last-child{border-bottom:none;}
+  .stat .num{
+    font-family:'Chakra Petch';font-size:2.1rem;font-weight:700;color:#f2f6ff;
+  }
+  .stat .label{color:var(--text-dim);font-size:.85rem;margin-top:2px;}
+
+  /* MARQUEE */
+  .marquee-wrap{
+    border-bottom:1px solid var(--line);
+    padding:16px 0;overflow:hidden;white-space:nowrap;
+    background:var(--panel);
+  }
+  .marquee{
+    display:inline-flex;gap:48px;animation:scroll 26s linear infinite;
+    font-family:'Chakra Petch';color:var(--text-dim);font-size:.95rem;
+  }
+  .marquee span{display:flex;align-items:center;gap:10px;}
+  .marquee span::before{content:"◆";color:var(--blue);font-size:.6rem;}
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .marquee{animation:none;}
+  }
+
+  /* SECTION HEADERS */
+  .section{padding:100px 5vw;border-bottom:1px solid var(--line);}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:48px;gap:24px;flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);color:#f2f6ff;max-width:16ch;}
+  .section-head p{color:var(--text-dim);max-width:38ch;line-height:1.6;}
+
+  /* CATEGORY GRID */
+  .cat-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .cat-card{
+    background:var(--void);padding:36px 28px;min-height:220px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;overflow:hidden;transition:background .2s;
+  }
+  .cat-card:hover{background:var(--panel);}
+  .cat-card .n{font-family:'Chakra Petch';color:var(--text-dim);font-size:.85rem;}
+  .cat-card h3{font-size:1.3rem;color:#f2f6ff;margin-top:60px;}
+  .cat-card .count{color:var(--blue);font-size:.85rem;margin-top:6px;font-family:'Chakra Petch';}
+
+  /* SCRIPT LIST */
+  .script-table{width:100%;border-collapse:collapse;}
+  .script-table thead th{
+    text-align:left;padding:12px 16px;color:var(--text-dim);
+    font-weight:500;font-size:.82rem;border-bottom:1px solid var(--line);
+  }
+  .script-table tbody tr{border-bottom:1px solid var(--line);transition:background .15s;}
+  .script-table tbody tr:hover{background:var(--panel);}
+  .script-table td{padding:20px 16px;font-size:.95rem;vertical-align:middle;}
+  .game-name{font-weight:700;color:#f2f6ff;font-family:'Chakra Petch';}
+  .badge{
+    display:inline-block;padding:4px 10px;border-radius:20px;
+    font-size:.72rem;font-weight:700;font-family:'Chakra Petch';
+  }
+  .badge.free{background:rgba(61,123,255,.14);color:var(--ice);border:1px solid var(--blue-dim);}
+  .badge.updated{background:rgba(120,255,180,.08);color:#8ff2c0;border:1px solid rgba(120,255,180,.25);}
+  .row-btn{
+    padding:8px 16px;border:1px solid var(--line);border-radius:var(--radius);
+    font-size:.82rem;font-weight:600;color:var(--text-dim);
+    transition:.15s;
+  }
+  .row-btn:hover{border-color:var(--blue);color:var(--ice);}
+
+  /* HOW IT WORKS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .step{background:var(--void);padding:40px 32px;}
+  .step .idx{font-family:'Chakra Petch';color:var(--blue);font-size:1rem;font-weight:700;}
+  .step h3{margin-top:18px;font-size:1.2rem;color:#f2f6ff;}
+  .step p{margin-top:10px;color:var(--text-dim);line-height:1.6;font-size:.92rem;}
+
+  /* CTA */
+  .cta-section{
+    padding:100px 5vw;text-align:center;position:relative;
+  }
+  .cta-section h2{font-size:clamp(2rem,4.4vw,3.4rem);color:#f2f6ff;max-width:20ch;margin:0 auto;}
+  .cta-section p{color:var(--text-dim);margin:20px auto 36px;max-width:44ch;}
+  .cta-actions{display:flex;gap:14px;justify-content:center;}
+
+  footer{
+    padding:48px 5vw;display:flex;justify-content:space-between;align-items:center;
+    color:var(--text-dim);font-size:.85rem;flex-wrap:wrap;gap:16px;
+  }
+  footer .fcol a{display:block;color:var(--text-dim);margin-top:8px;}
+  footer .fcol a:hover{color:var(--ice);}
+
+  /* toolbar + empty state + modal */
+  .table-toolbar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;}
+  .table-toolbar input, .table-toolbar select{
+    background:var(--panel);border:1px solid var(--line);color:var(--text);
+    padding:11px 14px;border-radius:var(--radius);font-size:.88rem;outline:none;
+    font-family:'Manrope';
+  }
+  .table-toolbar input{flex:1;min-width:220px;}
+  .table-toolbar input:focus, .table-toolbar select:focus{border-color:var(--blue);}
+
+  .empty-state{text-align:center;padding:60px 20px;color:var(--text-dim);}
+  .empty-state .glyph{font-size:1.8rem;color:var(--blue-dim);margin-bottom:14px;}
+
+  .modal-backdrop{
+    display:none;position:fixed;inset:0;background:rgba(2,4,10,.75);
+    backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:24px;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    width:100%;max-width:640px;max-height:80vh;display:flex;flex-direction:column;
+    padding:28px;
+  }
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .modal-head h3{font-size:1.3rem;color:#f2f6ff;}
+  .modal-close{background:none;border:none;color:var(--text-dim);font-size:1.1rem;cursor:pointer;}
+  .modal-close:hover{color:var(--ice);}
+  .modal-meta{color:var(--text-dim);font-size:.82rem;margin-bottom:16px;}
+  .modal-code{
+    background:var(--void);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ice);
+    overflow:auto;white-space:pre-wrap;word-break:break-word;flex:1;
+  }
+  .modal-actions{margin-top:18px;display:flex;justify-content:flex-end;}
+
+  @media (max-width:900px){
+    nav{display:none;}
+    .hero{grid-template-columns:1fr;}
+    .hero-stats{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:24px;flex-direction:row;flex-wrap:wrap;}
+    .stat{border-bottom:none;border-right:1px solid var(--line);padding-right:24px;}
+    .stat:last-child{border-right:none;}
+    .cat-grid{grid-template-columns:repeat(2,1fr);}
+    .steps{grid-template-columns:1fr;}
+    .script-table{display:block;overflow-x:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<header>
+  <div class="logo"><span class="mark"></span>VOIDSCRIPTS</div>
+  <nav>
+    <a href="#categorias">Categorias</a>
+    <a href="#scripts">Scripts</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#comunidade">Comunidade</a>
+  </nav>
+  <a href="#scripts" class="nav-cta">Ver scripts</a>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div>
+      <div class="hero-tag">CENTRAL DE SCRIPTS ROBLOX</div>
+      <h1>Domine qualquer<br><span>jogo.</span> Sem pagar nada.</h1>
+      <p class="lede">Uma central única com scripts gratuitos para os jogos mais jogados do Roblox — de simuladores a shooters, tudo testado e organizado por categoria.</p>
+      <div class="hero-actions">
+        <a href="#scripts" class="btn btn-primary">Explorar scripts →</a>
+        <a href="#como-funciona" class="btn btn-ghost">Como funciona</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">180+</div><div class="label">scripts catalogados</div></div>
+      <div class="stat"><div class="num">32</div><div class="label">jogos cobertos</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">gratuito, sempre</div></div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span>Simuladores</span><span>Tycoons</span><span>Shooters</span><span>RPG</span><span>Horror</span><span>Anime</span><span>Fighting</span><span>Obby</span>
+      <span>Simuladores</span><span>Tycoons</span><span>Shooters</span><span>RPG</span><span>Horror</span><span>Anime</span><span>Fighting</span><span>Obby</span>
+    </div>
+  </div>
+
+  <section class="section" id="categorias">
+    <div class="section-head">
+      <h2>Escolha por tipo de jogo</h2>
+      <p>Cada categoria reúne os scripts cadastrados naquele estilo de jogo.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <section class="section" id="scripts">
+    <div class="section-head">
+      <h2>Scripts disponíveis</h2>
+      <p>Clique em "Ver código" para abrir e copiar o script de cada jogo.</p>
+    </div>
+    <div class="table-toolbar">
+      <input type="text" id="siteSearch" placeholder="Buscar por nome do jogo...">
+      <select id="siteFilter"><option value="">Todas categorias</option></select>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr><th>Jogo</th><th>Categoria</th><th>Última atualização</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody id="scriptsBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="glyph">◆</div>
+      <div>Nenhum script publicado ainda. Adicione pelo <a href="admin.html" style="color:var(--ice);text-decoration:underline;">painel de administração</a>.</div>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalGame">Jogo</h3>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <pre class="modal-code" id="modalCode"></pre>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modalCopy">Copiar script</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="como-funciona">
+    <div class="section-head">
+      <h2>Como funciona</h2>
+      <p>Três passos entre você e o script certo.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="idx">01</div>
+        <h3>Encontre seu jogo</h3>
+        <p>Use a busca ou navegue por categoria para achar o jogo que você quer jogar.</p>
+      </div>
+      <div class="step">
+        <div class="idx">02</div>
+        <h3>Copie o script</h3>
+        <p>Cada página traz o código pronto, com a versão do jogo e a data da última verificação.</p>
+      </div>
+      <div class="step">
+        <div class="idx">03</div>
+        <h3>Cole no executor</h3>
+        <p>Rode no seu executor preferido e volte quando quiser explorar outro jogo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="comunidade">
+    <h2>Feito pela comunidade, para a comunidade.</h2>
+    <p>Todo script aqui é enviado e revisado por jogadores. Sem pagamentos, sem chaves escondidas, sem pegadinhas.</p>
+    <div class="cta-actions">
+      <a href="#scripts" class="btn btn-primary">Ver todos os scripts</a>
+      <a href="#" class="btn btn-ghost">Entrar no Discord</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="logo"><span class="mark"></span>VOIDSCRIPTS</div>
+  <div class="fcol">
+    <span>© 2026 VoidScripts</span>
+  </div>
+</footer>
+
+<script>
+// Se o backend estiver no mesmo domínio/porta que este arquivo, deixe vazio ("").
+// Se estiver em outro domínio, coloque a URL completa, ex: 'https://api.seusite.com'
+const API_BASE = '';
+
+function formatDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'numeric'});
+}
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+let allScripts = [];
+
+async function fetchScripts(){
+  try{
+    const res = await fetch(API_BASE + '/api/public/scripts');
+    if(!res.ok) throw new Error('Falha ao carregar scripts');
+    allScripts = await res.json();
+  }catch(e){
+    console.error(e);
+    allScripts = [];
+    document.getElementById('scriptsBody').innerHTML =
+      '<tr><td colspan="5" style="color:var(--text-dim);padding:24px;">Não foi possível conectar ao servidor. Verifique se o backend está rodando e se API_BASE está correto.</td></tr>';
+  }
+  buildCategories();
+  renderTable();
+}
+
+const catGrid = document.getElementById('catGrid');
+const siteFilter = document.getElementById('siteFilter');
+
+function buildCategories(){
+  catGrid.innerHTML = '';
+  siteFilter.innerHTML = '<option value="">Todas categorias</option>';
+
+  const categories = {};
+  allScripts.forEach(s => { categories[s.category] = (categories[s.category]||0) + 1; });
+  const catNames = Object.keys(categories).length ? Object.keys(categories) :
+    ['Simuladores','Shooters','RPG & Aventura','Horror','Tycoons','Anime','Fighting','Obby & Parkour'];
+
+  catNames.forEach((cat, i) => {
+    const count = categories[cat] || 0;
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.innerHTML = `<span class="n">${String(i+1).padStart(2,'0')}</span><div><h3>${escapeHtml(cat)}</h3><div class="count">${count} script${count===1?'':'s'}</div></div>`;
+    catGrid.appendChild(card);
+
+    const opt = document.createElement('option');
+    opt.value = cat; opt.textContent = cat;
+    siteFilter.appendChild(opt);
+  });
+}
+
+function renderTable(){
+  const q = document.getElementById('siteSearch').value.trim().toLowerCase();
+  const cat = siteFilter.value;
+  const filtered = allScripts.filter(s => {
+    const matchQ = !q || s.game.toLowerCase().includes(q);
+    const matchC = !cat || s.category === cat;
+    return matchQ && matchC;
+  });
+
+  const body = document.getElementById('scriptsBody');
+  const empty = document.getElementById('emptyState');
+  const table = document.querySelector('.script-table');
+  body.innerHTML = '';
+
+  if(filtered.length === 0){
+    table.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  table.style.display = '';
+  empty.style.display = 'none';
+
+  filtered.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="game-name">${escapeHtml(s.game)}</td>
+      <td>${escapeHtml(s.category)}</td>
+      <td>${formatDate(s.updatedAt)}</td>
+      <td>
+        ${s.free ? '<span class="badge free">GRATUITO</span>' : ''}
+        ${s.updatedFlag ? '<span class="badge updated">ATUALIZADO</span>' : ''}
+      </td>
+      <td><button class="row-btn" data-id="${s.id}">Ver código</button></td>
+    `;
+    body.appendChild(tr);
+  });
+
+  document.querySelectorAll('[data-id]').forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.id));
+  });
+}
+
+document.getElementById('siteSearch').addEventListener('input', renderTable);
+siteFilter.addEventListener('change', renderTable);
+
+const modalBackdrop = document.getElementById('modalBackdrop');
+function openModal(id){
+  const s = allScripts.find(x => x.id === id);
+  if(!s) return;
+  document.getElementById('modalGame').textContent = s.game;
+  document.getElementById('modalMeta').textContent = s.category + ' · atualizado em ' + formatDate(s.updatedAt) + (s.source ? ' · fonte: ' + s.source : '');
+  document.getElementById('modalCode').textContent = s.code;
+  modalBackdrop.classList.add('show');
+}
+document.getElementById('modalClose').addEventListener('click', () => modalBackdrop.classList.remove('show'));
+modalBackdrop.addEventListener('click', (e) => { if(e.target === modalBackdrop) modalBackdrop.classList.remove('show'); });
+document.getElementById('modalCopy').addEventListener('click', () => {
+  const code = document.getElementById('modalCode').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('modalCopy');
+    const original = btn.textContent;
+    btn.textContent = 'Copiado!';
+    setTimeout(() => btn.textContent = original, 1500);
+  });
+});
+
+fetchScripts();
+</script>
+</body>
+</html>
